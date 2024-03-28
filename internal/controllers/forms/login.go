@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/Danila331/YAP-2/internal/models"
+	"github.com/Danila331/YAP-2/internal/pkg"
 	"github.com/labstack/echo/v4"
 )
 
@@ -20,6 +21,13 @@ func LoginFormListener(c echo.Context) error {
 	if password != user.Password {
 		return echo.NewHTTPError(http.StatusNotFound, "Неверный пароль")
 	}
+	tokenString, err := pkg.MakeJwt(login)
 
-	return nil
+	if err != nil {
+		return err
+	}
+
+	return c.JSON(http.StatusOK, map[string]string{
+		"token": tokenString,
+	})
 }
