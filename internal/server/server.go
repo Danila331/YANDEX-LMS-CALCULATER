@@ -9,9 +9,10 @@ import (
 func StartServer() {
 	app := echo.New()
 
+	app.GET("/", pages.PageMain)
 	app.GET("/sign_up", pages.PageSignup)
 	app.GET("/login", pages.PageLogin)
 	app.POST("/submit_login", forms.LoginFormListener)
 	app.POST("/submit_signup", forms.SignFormListener)
-	app.Start(":8080")
+	app.Start(":8081")
 }
