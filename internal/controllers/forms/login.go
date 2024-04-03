@@ -26,6 +26,13 @@ func LoginFormListener(c echo.Context) error {
 	if err != nil {
 		return err
 	}
+	// Устанавливаем токен в куку
+	cookie := &http.Cookie{
+		Name:     "jwtCookie",
+		Value:    tokenString,
+		HttpOnly: true,
+	}
+	c.SetCookie(cookie)
 
 	return c.JSON(http.StatusOK, map[string]string{
 		"token": tokenString,

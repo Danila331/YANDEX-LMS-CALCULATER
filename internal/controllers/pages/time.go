@@ -1,6 +1,7 @@
 package pages
 
 import (
+	"fmt"
 	"html/template"
 	"path/filepath"
 
@@ -8,10 +9,10 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func pageTime(c echo.Context) error {
+func PageTime(c echo.Context) error {
 	var time models.Time
 	time, err := time.ReadAll()
-
+	fmt.Println(err)
 	if err != nil {
 		return err
 	}
@@ -21,6 +22,7 @@ func pageTime(c echo.Context) error {
 	}
 
 	templ, err := template.ParseFiles(htmlFiles...)
+	fmt.Println(err)
 	if err != nil {
 		return err
 	}

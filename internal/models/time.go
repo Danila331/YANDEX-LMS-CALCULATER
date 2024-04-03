@@ -1,6 +1,10 @@
 package models
 
-import "github.com/Danila331/YAP-2/internal/store"
+import (
+	"fmt"
+
+	"github.com/Danila331/YAP-2/internal/store"
+)
 
 type Time struct {
 	TimePulse int
@@ -20,7 +24,7 @@ func (t *Time) Update() error {
 		return err
 	}
 	defer conn.Close()
-	_ = conn.QueryRow("UPDATE times SET timepulse = ?, timeminus = ?, timeproz = ?, timedel = ?",
+	_ = conn.QueryRow("UPDATE time SET timepulse = ?, timeminus = ?, timeproz = ?, timedel = ?",
 		t.TimePulse,
 		t.TimeMinus,
 		t.TimeProz,
@@ -31,16 +35,17 @@ func (t *Time) Update() error {
 
 func (t *Time) ReadAll() (Time, error) {
 	conn, err := store.ConnectToDatabase()
+	fmt.Println(err)
 	if err != nil {
 		return Time{}, err
 	}
 	defer conn.Close()
 	var time Time
-	err = conn.QueryRow("SELECT * FROM times").Scan(&time.TimePulse,
+	err = conn.QueryRow("SELECT * FROM time").Scan(&time.TimePulse,
 		&time.TimeMinus,
 		&time.TimeProz,
 		&time.TimeDel)
-
+	fmt.Println(err)
 	if err != nil {
 		return Time{}, err
 	}

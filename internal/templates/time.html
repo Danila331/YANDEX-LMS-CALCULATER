@@ -1,4 +1,4 @@
-{{ define "signup" }}
+{{ deifne "time" }}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -107,14 +107,20 @@
         </div>
     </div> 
     <div class="main">
-        <form action="/login_signup" method="post" class="form">
-                <label for="login" class="form__text">Login</label>
-                <input type="text" id="login" name="login" class="form__field">
-                
-                <label for="password" class="form__text">Password</label>
-                <input type="text" id="password" name="password" class="form__field">
-                
-                <input type="submit" value="Submit" class="form__subnit">
+        <form action="/time_submit" method="post" class="form">
+            <label for="field1" class="form__text">Время для сложения:</label>
+            <input type="text" id="field1" name="timepulse" value="{{.TimePulse}}" class="form__field">
+            
+            <label for="field2" class="form__text">Время для вычитания:</label>
+            <input type="text" id="field2" name="timeminus" value="{{.TimeMinus}}" class="form__field">
+            
+            <label for="field3" class="form__text">Время для умножения:</label>
+            <input type="text" id="field3" name="timeproz" value="{{.TimeProz}}" class="form__field">
+            
+            <label for="field4" class="form__text">Время для деления:</label>
+            <input type="text" id="field4" name="timedel" value="{{.TimeDel}}" class="form__field">
+            
+            <input type="submit" value="Submit" class="form__submit">
         </form>
     </div>
 </body>

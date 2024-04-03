@@ -10,7 +10,11 @@ import (
 
 func formExpressionListener(c echo.Context) error {
 	expressionString := c.FormValue("expression")
-	jwtString := c.FormValue("jwt")
+	cookie, err := c.Cookie("jwtCookie")
+	if err != nil {
+		return err
+	}
+	jwtString := cookie.Value
 	userLogin, err := pkg.GetUserLoginFromJWT(jwtString)
 	if err != nil {
 		return err
