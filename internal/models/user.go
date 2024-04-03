@@ -38,5 +38,8 @@ func (u *User) ReadByLogin() (User, error) {
 	defer conn.Close()
 	var user User
 	err = conn.QueryRow("SELECT * FROM users WHERE login = ?", u.Login).Scan(&user.Login, &user.Password)
+	if err != nil {
+		return User{}, err
+	}
 	return user, nil
 }

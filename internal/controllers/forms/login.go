@@ -21,7 +21,7 @@ func LoginFormListener(c echo.Context) error {
 	if password != user.Password {
 		return echo.NewHTTPError(http.StatusNotFound, "Неверный пароль")
 	}
-	tokenString, err := pkg.MakeJwt(login)
+	tokenString, err := pkg.GenerateJWT(login)
 
 	if err != nil {
 		return err

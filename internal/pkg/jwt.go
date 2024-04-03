@@ -1,22 +1,29 @@
 package pkg
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/golang-jwt/jwt"
 )
 
-var secretKey = "mami22"
+type MyCustomClaims struct {
+	UserLogin string `json:"userlogin"`
+	jwt.StandardClaims
+}
 
-func MakeJwt(login string) (string, error) {
-	// Создаем структуру токена с именем пользователя в качестве пользовательского клейма
-	token := jwt.New(jwt.SigningMethodHS256)
-	claims := token.Claims.(jwt.MapClaims)
-	claims["login"] = login
-	claims["exp"] = time.Now().Add(time.Hour * 24).Unix() // Токен действителен в течение 24 часов
+var secretKey = []byte("mami")
 
-	// Получаем строковое представление токена
-	tokenString, err := token.SignedString([]byte("your_secret_key"))
+func GenerateJWT(userLogin string) (string, error) {
+	claims := MyCustomClaims{
+		userLogin,
+		jwt.StandardClaims{
+			ExpiresAt: time.Now().Add(time.Hour * 24).Unix(), // Пример: токен действителен 24 часа                  // Замените "your-issuer" на ваше имя или идентификатор приложения
+		},
+	}
+
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	tokenString, err := token.SignedString(secretKey)
 	if err != nil {
 		return "", err
 	}
@@ -24,19 +31,18 @@ func MakeJwt(login string) (string, error) {
 	return tokenString, nil
 }
 
-func ValidJwt(tokenString string) (bool, error) {
-	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+func GetUserLoginFromJWT(tokenString string) (string, error) {
+	token, err := jwt.ParseWithClaims(tokenString, &MyCustomClaims{}, func(token *jwt.Token) (interface{}, error) {
 		return secretKey, nil
 	})
-
 	if err != nil {
-		return false, err
+		return "", err
 	}
 
-	// Проверка, является ли токен валидным и не истек
-	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-		expirationTime := time.Unix(int64(claims["exp"].(float64)), 0)
-		return time.Now().After(expirationTime), nil
+	claims, ok := token.Claims.(*MyCustomClaims)
+	if !ok || !token.Valid {
+		return "", fmt.Errorf("invalid JWT token")
 	}
-	return true, nil
+
+	return claims.UserLogin, nil
 }

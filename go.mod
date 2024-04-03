@@ -3,6 +3,7 @@ module github.com/Danila331/YAP-2
 go 1.21.0
 
 require (
+	github.com/Knetic/govaluate v3.0.0+incompatible // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
 	github.com/google/uuid v1.3.0 // indirect
